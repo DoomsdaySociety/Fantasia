@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "top.mrxiaom.fantasia.mixin",
+  "refmap": "mixins.fantasia.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "FixNetHandlerPlayClient",
+    "MixinGuiButton",
+    "MixinGuiInventory",
+    "MixinGuiMainMenu",
+    "MixinGuiScreen",
+    "MixinGuiSlot",
+    "MixinMinecraft",
+    "FixScoreboard",
+    "MixinSPacketChat"
+  ]
+}
