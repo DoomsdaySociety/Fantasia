@@ -4,7 +4,7 @@
 </div>
 
 
-![Minecraft](https://img.shields.io/badge/Minecraft-1.12.2-orange?style=flat-square&logo=minecraftjavaedition) [![releases](https://img.shields.io/github/downloads/DoomsdaySociety/Fantasia/total?style=flat-square&logo=github)](https://github.com/DoomsdaySociety/Fantasia/releases) [![license](https://img.shields.io/badge/License-MrXiaoM%20Data%20Sharing%20and%20Open%20Source-blue?style=flat-square&logo=github)](./LICENSE)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.12.2-orange?style=flat-square&logo=minecraftjavaedition) [![releases](https://img.shields.io/github/downloads/DoomsdaySociety/Fantasia/total?style=flat-square&logo=github)](https://github.com/DoomsdaySociety/Fantasia/releases) [![license](https://img.shields.io/badge/License-AGPL--3.0%20License-blue?style=flat-square&logo=github)](./LICENSE)
 
 > *陷入更深层的幻想罢。*
 
