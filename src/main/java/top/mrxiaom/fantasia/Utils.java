@@ -10,9 +10,23 @@ import java.nio.charset.StandardCharsets;
 
 public class Utils {
 
+    public static String removeColors(String s) {
+        StringBuilder result = new StringBuilder();
+        boolean a = false;
+        char[] array = s.toCharArray();
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == '§') {
+                i++;
+                continue;
+            }
+            result.append(array[i]);
+        }
+        return result.toString();
+    }
+
     public static String readAsString(File file) {
         StringBuilder result = new StringBuilder();
-        try(
+        try (
                 FileInputStream input = new FileInputStream(file);
                 InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
                 BufferedReader br = new BufferedReader(reader)) {
@@ -21,7 +35,7 @@ public class Utils {
             // 逐行读取
             while ((lineTxt = br.readLine()) != null) {
                 // 输出内容到控制台
-                if (a)  result.append("\n");
+                if (a) result.append("\n");
                 else a = true;
                 result.append(lineTxt);
             }
@@ -44,6 +58,34 @@ public class Utils {
         }
     }
 
+    public static void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor,
+                                    float zLevel) {
+        float f = (float) (startColor >> 24 & 255) / 255.0F;
+        float f1 = (float) (startColor >> 16 & 255) / 255.0F;
+        float f2 = (float) (startColor >> 8 & 255) / 255.0F;
+        float f3 = (float) (startColor & 255) / 255.0F;
+        float f4 = (float) (endColor >> 24 & 255) / 255.0F;
+        float f5 = (float) (endColor >> 16 & 255) / 255.0F;
+        float f6 = (float) (endColor >> 8 & 255) / 255.0F;
+        float f7 = (float) (endColor & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buf = tessellator.getBuffer();
+        buf.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        buf.pos((double) right, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        buf.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        buf.pos((double) left, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
+        buf.pos((double) right, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
 
     public static void drawRect(float left, float top, float right, float bottom, float thickness, float alpha, float red, float green, float blue) {
         fillRect(left - thickness, top, left, bottom, alpha, red, green, blue);
@@ -52,17 +94,14 @@ public class Utils {
         fillRect(left - thickness, bottom, right + thickness, bottom + thickness, alpha, red, green, blue);
     }
 
-    public static void fillRect(float left, float top, float right, float bottom, float alpha, float red, float green, float blue)
-    {
-        if (left < right)
-        {
+    public static void fillRect(float left, float top, float right, float bottom, float alpha, float red, float green, float blue) {
+        if (left < right) {
             float i = left;
             left = right;
             right = i;
         }
 
-        if (top < bottom)
-        {
+        if (top < bottom) {
             float j = top;
             top = bottom;
             bottom = j;

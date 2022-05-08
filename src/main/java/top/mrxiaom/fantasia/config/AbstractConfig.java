@@ -1,9 +1,10 @@
-package top.mrxiaom.fantasia;
+package top.mrxiaom.fantasia.config;
 
 import java.io.File;
 
 public abstract class AbstractConfig {
     public final File configFile;
+
     public AbstractConfig(File configFile) {
         this.configFile = configFile;
     }

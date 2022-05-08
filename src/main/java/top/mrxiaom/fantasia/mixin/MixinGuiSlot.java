@@ -1,6 +1,5 @@
 package top.mrxiaom.fantasia.mixin;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -8,7 +7,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,23 +15,32 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class MixinGuiSlot {
 
 
-    @Shadow protected abstract void drawBackground();
+    @Shadow
+    protected abstract void drawBackground();
 
-    @Shadow protected abstract int getScrollBarX();
+    @Shadow
+    protected abstract int getScrollBarX();
 
-    @Shadow protected abstract void bindAmountScrolled();
+    @Shadow
+    protected abstract void bindAmountScrolled();
 
-    @Shadow public abstract int getListWidth();
+    @Shadow
+    public abstract int getListWidth();
 
-    @Shadow protected abstract void drawListHeader(int insideLeft, int insideTop, Tessellator tessellatorIn);
+    @Shadow
+    protected abstract void drawListHeader(int insideLeft, int insideTop, Tessellator tessellatorIn);
 
-    @Shadow protected abstract void drawSelectionBox(int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks);
+    @Shadow
+    protected abstract void drawSelectionBox(int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks);
 
-    @Shadow public abstract int getMaxScroll();
+    @Shadow
+    public abstract int getMaxScroll();
 
-    @Shadow protected abstract int getContentHeight();
+    @Shadow
+    protected abstract int getContentHeight();
 
-    @Shadow protected abstract void renderDecorations(int mouseXIn, int mouseYIn);
+    @Shadow
+    protected abstract void renderDecorations(int mouseXIn, int mouseYIn);
 
     @Shadow
     public int width;
@@ -63,18 +70,17 @@ public abstract class MixinGuiSlot {
      * @reason 移除列表背景
      */
     @Overwrite
-    protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha){
+    protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) {
         Gui.drawRect(0, startY, width, endY, 0x80000000);
     }
+
     /**
      * @author MrXiaoM
      * @reason 移除列表背景
      */
     @Overwrite
-    public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks)
-    {
-        if (this.visible)
-        {
+    public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks) {
+        if (this.visible) {
             this.mouseX = mouseXIn;
             this.mouseY = mouseYIn;
             this.drawBackground();
@@ -88,10 +94,9 @@ public abstract class MixinGuiSlot {
             // Forge: background rendering moved into separate method.
             // this.drawContainerBackground(tessellator);
             int k = this.left + this.width / 2 - this.getListWidth() / 2 + 2;
-            int l = this.top + 4 - (int)this.amountScrolled;
+            int l = this.top + 4 - (int) this.amountScrolled;
 
-            if (this.hasListHeader)
-            {
+            if (this.hasListHeader) {
                 this.drawListHeader(k, l, tessellator);
             }
 
@@ -120,14 +125,12 @@ public abstract class MixinGuiSlot {
             }
             int j1 = this.getMaxScroll();
 
-            if (j1 > 0)
-            {
+            if (j1 > 0) {
                 int k1 = (this.bottom - this.top) * (this.bottom - this.top) / this.getContentHeight();
                 k1 = MathHelper.clamp(k1, 32, this.bottom - this.top - 8);
-                int l1 = (int)this.amountScrolled * (this.bottom - this.top - k1) / j1 + this.top;
+                int l1 = (int) this.amountScrolled * (this.bottom - this.top - k1) / j1 + this.top;
 
-                if (l1 < this.top)
-                {
+                if (l1 < this.top) {
                     l1 = this.top;
                 }
 

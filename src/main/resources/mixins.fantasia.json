@@ -6,14 +6,16 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "FixNetHandlerPlayClient",
+    "FixScoreboard",
     "MixinGuiButton",
+    "MixinGuiIngame",
     "MixinGuiInventory",
     "MixinGuiMainMenu",
     "MixinGuiScreen",
+    "MixinGuiSingleplayer",
     "MixinGuiSlot",
     "MixinMinecraft",
-    "FixScoreboard",
-    "MixinSPacketChat"
+    "MixinSPacketChat",
+    "MixinGuiIngameMenu"
   ]
 }

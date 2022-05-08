@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://bmclapi2.bangbang93.com/maven' }
+
         maven { url = 'https://maven.minecraftforge.net/' }
         maven { url = 'https://repo.spongepowered.org/maven' }
         maven { url = 'https://maven.aliyun.com/repository/central' }

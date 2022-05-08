@@ -25,34 +25,27 @@ public abstract class MixinMinecraft {
 
     @Shadow
     abstract void updateDisplayMode() throws LWJGLException;
+
     /**
      * @author MrXiaoM
      * @reason 修改标题
      */
     @Overwrite
-    private void createDisplay() throws LWJGLException
-    {
+    private void createDisplay() throws LWJGLException {
         Display.setResizable(true);
         ModWrapper.updateTitle();
 
-        try
-        {
+        try {
             Display.create((new PixelFormat()).withDepthBits(24));
-        }
-        catch (LWJGLException lwjglexception)
-        {
+        } catch (LWJGLException lwjglexception) {
             LOGGER.error("Couldn't set pixel format", lwjglexception);
 
-            try
-            {
+            try {
                 Thread.sleep(1000L);
-            }
-            catch (InterruptedException ignored)
-            {
+            } catch (InterruptedException ignored) {
             }
 
-            if (this.fullscreen)
-            {
+            if (this.fullscreen) {
                 this.updateDisplayMode();
             }
             Display.create();

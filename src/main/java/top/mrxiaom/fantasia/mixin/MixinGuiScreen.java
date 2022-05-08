@@ -10,28 +10,28 @@ import top.mrxiaom.fantasia.ModWrapper;
 
 @Mixin(GuiScreen.class)
 public class MixinGuiScreen extends Gui {
-    @Shadow public Minecraft mc;
+    @Shadow
+    public Minecraft mc;
 
-    @Shadow public int width;
+    @Shadow
+    public int width;
 
-    @Shadow public int height;
+    @Shadow
+    public int height;
 
     /**
      * @author MrXiaoM
      * @reason 修改背景
      */
     @Overwrite
-    public void drawWorldBackground(int tint)
-    {
-        if (this.mc.world != null)
-        {
+    public void drawWorldBackground(int tint) {
+        if (this.mc.world != null) {
             this.drawGradientRect(0, 0, this.width, this.height, 0x60000000, 0x80000000);
-        }
-        else
-        {
+        } else {
             this.drawBackground(tint);
         }
     }
+
     /**
      * @author MrXiaoM
      * @reason 修改背景

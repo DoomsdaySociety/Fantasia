@@ -1,25 +1,22 @@
-package top.mrxiaom.fantasia;
+package top.mrxiaom.fantasia.config;
 
 import com.google.gson.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.multiplayer.ServerList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.mrxiaom.fantasia.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
-public class MainMenuConfig extends AbstractConfig{
+public class MainMenuConfig extends AbstractConfig {
     Logger logger = LogManager.getLogger("Fantasia-MainMenu");
     public final List<String> servers = new ArrayList<>();
     public String selected;
     public boolean isParallax;
+
     public MainMenuConfig(File configFile) {
         super(configFile);
     }
@@ -36,8 +33,6 @@ public class MainMenuConfig extends AbstractConfig{
 
     @Override
     public void loadDefaultConfig() {
-        logger.info("正在保存默认配置文件");
-
         servers.clear();
 
         servers.add("§a自动路线:mc.66ko.cc");
@@ -48,29 +43,32 @@ public class MainMenuConfig extends AbstractConfig{
         selected = "§a自动路线";
 
         isParallax = true;
-        saveConfig();
     }
 
     public void reloadConfig() {
         try {
             if (!configFile.exists()) throw new FileNotFoundException("找不到配置文件");
             JsonElement jsonElement = new JsonParser().parse(Utils.readAsString(configFile));
-
-            servers.clear();
-
             JsonObject json = jsonElement.getAsJsonObject();
-            JsonArray serverArray = json.get("servers").getAsJsonArray();
-            for (int i = 0; i < serverArray.size(); i++) {
-                servers.add(serverArray.get(i).getAsString());
+
+            loadDefaultConfig();
+
+            if (json.has("servers")) {
+                JsonArray serverArray = json.get("servers").getAsJsonArray();
+                servers.clear();
+                for (int i = 0; i < serverArray.size(); i++) {
+                    servers.add(serverArray.get(i).getAsString());
+                }
             }
-            selected = json.get("selected-server").getAsString();
-            isParallax = json.get("is-parallax").getAsBoolean();
+            if(json.has("selected-server")) selected = json.get("selected-server").getAsString();
+            if(json.has("is-parallax")) isParallax = json.get("is-parallax").getAsBoolean();
         } catch (Throwable t) {
             logger.warn("无法加载配置文件", t);
             if (configFile.exists()) {
                 configFile.renameTo(new File(configFile.getParentFile(), configFile.getName() + ".old"));
             }
             loadDefaultConfig();
+            saveConfig();
         }
     }
 

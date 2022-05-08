@@ -1,4 +1,4 @@
-package top.mrxiaom.fantasia;
+package top.mrxiaom.fantasia.gui;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -29,8 +29,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @SideOnly(Side.CLIENT)
-public class GuiServerEntry implements GuiListExtended.IGuiListEntry
-{
+public class GuiServerEntry implements GuiListExtended.IGuiListEntry {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(5, (new ThreadFactoryBuilder()).setNameFormat("Server Pinger #%d").setDaemon(true).build());
     private static final ResourceLocation UNKNOWN_SERVER = new ResourceLocation("fantasia", "textures/server_default.png");
@@ -42,13 +41,12 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
     private String lastIconB64;
     private DynamicTexture icon;
 
-    protected GuiServerEntry(GuiServerList ownerIn, ServerData serverIn)
-    {
+    protected GuiServerEntry(GuiServerList ownerIn, ServerData serverIn) {
         this.owner = ownerIn;
         this.server = serverIn;
         this.mc = Minecraft.getMinecraft();
         this.serverIcon = new ResourceLocation("servers/" + serverIn.serverIP + "/icon");
-        this.icon = (DynamicTexture)this.mc.getTextureManager().getTexture(this.serverIcon);
+        this.icon = (DynamicTexture) this.mc.getTextureManager().getTexture(this.serverIcon);
     }
 
     public void ping() {
@@ -57,27 +55,20 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         this.server.serverMOTD = "";
         this.server.populationInfo = "";
         EXECUTOR.submit(() -> {
-            try
-            {
+            try {
                 owner.getOldServerPinger().ping(server);
-            }
-            catch (UnknownHostException var2)
-            {
+            } catch (UnknownHostException var2) {
                 server.pingToServer = -1L;
                 server.serverMOTD = TextFormatting.DARK_RED + I18n.format("multiplayer.status.cannot_resolve");
-            }
-            catch (Exception var3)
-            {
+            } catch (Exception var3) {
                 server.pingToServer = -1L;
                 server.serverMOTD = TextFormatting.DARK_RED + I18n.format("multiplayer.status.cannot_connect");
             }
         });
     }
 
-    public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks)
-    {
-        if (!this.server.pinged)
-        {
+    public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
+        if (!this.server.pinged) {
             ping();
         }
 
@@ -92,29 +83,28 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         int l = 5;
         String s1;
 
-        if (flag2) s1 = I18n.format(flag ? "multiplayer.status.client_out_of_date" : "multiplayer.status.server_out_of_date");
+        if (flag2)
+            s1 = I18n.format(flag ? "multiplayer.status.client_out_of_date" : "multiplayer.status.server_out_of_date");
         else if (this.server.pinged && this.server.pingToServer != -2L) {
-            if (this.server.pingToServer < 0L);
+            if (this.server.pingToServer < 0L) ;
             else if (this.server.pingToServer < 150L) l = 0;
             else if (this.server.pingToServer < 300L) l = 1;
             else if (this.server.pingToServer < 600L) l = 2;
             else if (this.server.pingToServer < 1000L) l = 3;
             else l = 4;
             s1 = this.server.pingToServer < 0L ? I18n.format("multiplayer.status.no_connection") : (this.server.pingToServer + "ms");
-        }
-        else {
+        } else {
             k = 1;
-            l = (int)(Minecraft.getSystemTime() / 100L + (long)(slotIndex * 2L) & 7L);
+            l = (int) (Minecraft.getSystemTime() / 100L + (slotIndex * 2L) & 7L);
             if (l > 4) l = 8 - l;
             s1 = I18n.format("multiplayer.status.pinging");
         }
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(Gui.ICONS);
-        Gui.drawModalRectWithCustomSizedTexture(x + listWidth - 15, y + slotHeight / 2 - 4, (float)(k * 10), (float)(176 + l * 8), 10, 8, 256.0F, 256.0F);
+        Gui.drawModalRectWithCustomSizedTexture(x + listWidth - 15, y + slotHeight / 2 - 4, (float) (k * 10), (float) (176 + l * 8), 10, 8, 256.0F, 256.0F);
 
-        if (this.server.getBase64EncodedIconData() != null && !this.server.getBase64EncodedIconData().equals(this.lastIconB64))
-        {
+        if (this.server.getBase64EncodedIconData() != null && !this.server.getBase64EncodedIconData().equals(this.lastIconB64)) {
             this.lastIconB64 = this.server.getBase64EncodedIconData();
             this.prepareServerIcon();
         }
@@ -125,25 +115,20 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         // 延迟
         if (i1 >= listWidth - 15 && i1 <= listWidth - 5 && j1 >= slotHeight / 2 - 4 && j1 <= slotHeight / 2 + 4)
             this.owner.setHoveringText(s1);
-        // motd
+            // motd
         else if (server.pingToServer >= -1 && i1 >= 32 && i1 <= listWidth - 15 - 2 && j1 >= 15 && j1 <= 25)
             this.owner.setHoveringText(server.serverMOTD);
 
-        if (this.mc.gameSettings.touchscreen || isSelected)
-        {
+        if (this.mc.gameSettings.touchscreen || isSelected) {
             this.mc.getTextureManager().bindTexture(SERVER_SELECTION_BUTTONS);
             Gui.drawRect(x, y, x + 32, y + 32, -1601138544);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             int k1 = mouseX - x;
 
-            if (this.canJoin())
-            {
-                if (k1 < 32 && k1 > 16)
-                {
+            if (this.canJoin()) {
+                if (k1 < 32 && k1 > 16) {
                     Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 32.0F, 32, 32, 256.0F, 256.0F);
-                }
-                else
-                {
+                } else {
                     Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 256.0F, 256.0F);
                     if (!this.owner.isShowSelectionBox() && this.owner.getHoveringText() == null)
                         this.owner.setHoveringText("点击展开服务器列表");
@@ -152,52 +137,40 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         }
     }
 
-    protected void drawTextureAt(int p_178012_1_, int p_178012_2_, ResourceLocation p_178012_3_)
-    {
+    protected void drawTextureAt(int p_178012_1_, int p_178012_2_, ResourceLocation p_178012_3_) {
         this.mc.getTextureManager().bindTexture(p_178012_3_);
         GlStateManager.enableBlend();
         Gui.drawModalRectWithCustomSizedTexture(p_178012_1_, p_178012_2_, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
         GlStateManager.disableBlend();
     }
 
-    private boolean canJoin()
-    {
+    private boolean canJoin() {
         return true;
     }
 
-    private void prepareServerIcon()
-    {
-        if (this.server.getBase64EncodedIconData() == null)
-        {
+    private void prepareServerIcon() {
+        if (this.server.getBase64EncodedIconData() == null) {
             this.mc.getTextureManager().deleteTexture(this.serverIcon);
             this.icon = null;
-        }
-        else
-        {
+        } else {
             ByteBuf bytebuf = Unpooled.copiedBuffer(this.server.getBase64EncodedIconData(), StandardCharsets.UTF_8);
             ByteBuf bytebuf1 = null;
             BufferedImage bufferedimage;
             label99:
             {
-                try
-                {
+                try {
                     bytebuf1 = Base64.decode(bytebuf);
                     bufferedimage = TextureUtil.readBufferedImage(new ByteBufInputStream(bytebuf1));
                     Validate.validState(bufferedimage.getWidth() == 64, "Must be 64 pixels wide");
                     Validate.validState(bufferedimage.getHeight() == 64, "Must be 64 pixels high");
                     break label99;
-                }
-                catch (Throwable throwable)
-                {
+                } catch (Throwable throwable) {
                     LOGGER.error("Invalid icon for server {} ({})", this.server.serverName, this.server.serverIP, throwable);
                     this.server.setBase64EncodedIconData(null);
-                }
-                finally
-                {
+                } finally {
                     bytebuf.release();
 
-                    if (bytebuf1 != null)
-                    {
+                    if (bytebuf1 != null) {
                         bytebuf1.release();
                     }
                 }
@@ -205,8 +178,7 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
                 return;
             }
 
-            if (this.icon == null)
-            {
+            if (this.icon == null) {
                 this.icon = new DynamicTexture(bufferedimage.getWidth(), bufferedimage.getHeight());
                 this.mc.getTextureManager().loadTexture(this.serverIcon, this.icon);
             }
@@ -216,12 +188,9 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         }
     }
 
-    public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY)
-    {
-        if (relativeX <= 32)
-        {
-            if (relativeX < 32 && relativeX > 16 && this.canJoin())
-            {
+    public boolean mousePressed(int slotIndex, int mouseX, int mouseY, int mouseEvent, int relativeX, int relativeY) {
+        if (relativeX <= 32) {
+            if (relativeX < 32 && relativeX > 16 && this.canJoin()) {
                 this.owner.connectTo(this);
                 return true;
             }
@@ -236,16 +205,13 @@ public class GuiServerEntry implements GuiListExtended.IGuiListEntry
         return false;
     }
 
-    public void updatePosition(int slotIndex, int x, int y, float partialTicks)
-    {
+    public void updatePosition(int slotIndex, int x, int y, float partialTicks) {
     }
 
-    public void mouseReleased(int slotIndex, int x, int y, int mouseEvent, int relativeX, int relativeY)
-    {
+    public void mouseReleased(int slotIndex, int x, int y, int mouseEvent, int relativeX, int relativeY) {
     }
 
-    public ServerData getServerData()
-    {
+    public ServerData getServerData() {
         return this.server;
     }
 }
