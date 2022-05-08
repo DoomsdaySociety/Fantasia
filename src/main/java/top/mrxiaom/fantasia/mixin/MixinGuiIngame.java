@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 import top.mrxiaom.fantasia.Utils;
 
@@ -80,7 +81,7 @@ public abstract class MixinGuiIngame extends Gui {
             int l = scaledRes.getScaledWidth() - 3 + 2;
             drawRect(l1 - 2, k, l, k + this.getFontRenderer().FONT_HEIGHT, 1342177280);
             this.getFontRenderer().drawString(s1, l1, k, 553648127);
-            if (!ModWrapper.getHudConfig().isHideScoreboardNumber)
+            if (!FMLPlugin.getHudConfig().isHideScoreboardNumber)
                 this.getFontRenderer().drawString(s2, l - this.getFontRenderer().getStringWidth(s2), k, 553648127);
 
             if (j == collection.size() - m) {

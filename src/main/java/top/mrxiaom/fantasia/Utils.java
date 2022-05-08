@@ -49,10 +49,15 @@ public class Utils {
         try {
             file.getParentFile().mkdirs();
             file.createNewFile();
-            BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        }catch (Throwable ignored){}
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)){
+            BufferedWriter out = new BufferedWriter(osw);
             out.write(content);
             out.flush();
             out.close();
+
         } catch (Throwable t) {
             t.printStackTrace();
         }

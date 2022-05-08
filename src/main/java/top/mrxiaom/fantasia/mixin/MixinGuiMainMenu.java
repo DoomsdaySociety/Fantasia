@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 import top.mrxiaom.fantasia.gui.GuiConfig;
 import top.mrxiaom.fantasia.gui.GuiPasswordField;
@@ -51,7 +52,6 @@ public class MixinGuiMainMenu extends GuiScreen {
     private int widthCopyright;
     @Shadow
     private int widthCopyrightRest;
-    private net.minecraftforge.client.gui.NotificationModUpdateScreen modUpdateNotification;
     @Shadow
     private float panoramaTimer;
     private GuiButton modButton;
@@ -92,7 +92,7 @@ public class MixinGuiMainMenu extends GuiScreen {
         } else {
             init = true;
             FMLClientHandler.instance().setupServerList();
-            servers = ModWrapper.getMainMenuConfig().getServerList();
+            servers = FMLPlugin.getMainMenuConfig().getServerList();
             serverList = new GuiServerList(this, mc, serverX, serverY, 114, 514, 36);
             serverList.setConnectEvent(() -> {
                 ModWrapper.pushTempPassword(pwField.getText());
@@ -116,10 +116,6 @@ public class MixinGuiMainMenu extends GuiScreen {
         this.buttonList.add(new GuiButton(4, serverX - 3, j + 24 * 4, serverList.width + 6, 20, I18n.format("menu.quit")));
 
         this.mc.setConnectedToRealms(false);
-
-        modUpdateNotification = new NotificationModUpdateScreen(modButton);
-        modUpdateNotification.setGuiSize(super.width, super.height);
-        modUpdateNotification.initGui();
     }
 
     public void handleMouseInput() throws IOException {
@@ -224,8 +220,6 @@ public class MixinGuiMainMenu extends GuiScreen {
         Gui.drawModalRectWithCustomSizedTexture(langButton.x, langButton.y, 0, 0, 20, 20, 20, 20);
 
         this.serverList.drawScreen(mouseX, mouseY, partialTicks);
-
-        modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Inject(at = @At("HEAD"), method = "mouseClicked*", cancellable = true)

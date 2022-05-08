@@ -53,25 +53,11 @@ public class ModWrapper extends DummyModContainer {
     private static Logger logger;
     private static final ResourceLocation resBg = new ResourceLocation("fantasia", "textures/gui/background.png");
     private static ModWrapper instance;
-    private static MainMenuConfig mainMenuConfig;
-    private static ChatConfig chatConfig;
-    private static HUDConfig hudConfig;
     private static String tempPW = "";
     public static ModWrapper getInstance() {
         return instance;
     }
 
-    public static MainMenuConfig getMainMenuConfig() {
-        return mainMenuConfig;
-    }
-
-    public static ChatConfig getChatConfig() {
-        return chatConfig;
-    }
-
-    public static HUDConfig getHudConfig() {
-        return hudConfig;
-    }
 
     public static void pushTempPassword(String pw) {
         tempPW = pw;
@@ -107,15 +93,6 @@ public class ModWrapper extends DummyModContainer {
         FMLClientHandler.instance().addModAsResource(this);
     }
 
-    public static void reloadConfig() {
-        if (chatConfig == null) chatConfig = new ChatConfig(new File(FMLPlugin.getConfigPath(), "chat.json"));
-        if (mainMenuConfig == null) mainMenuConfig = new MainMenuConfig(new File(FMLPlugin.getConfigPath(), "mainmenu.json"));
-        if (hudConfig == null) hudConfig = new HUDConfig(new File(FMLPlugin.getConfigPath(), "hud.json"));
-        chatConfig.reloadConfig();
-        mainMenuConfig.reloadConfig();
-        hudConfig.reloadConfig();
-    }
-
     @Override
     public boolean registerBus(EventBus bus, LoadController controller) {
         bus.register(this);
@@ -141,7 +118,7 @@ public class ModWrapper extends DummyModContainer {
         // 展示框物品显示
         // 继承自 都市小工具
         Minecraft mc = Minecraft.getMinecraft();
-        if (hudConfig.isShowFrameItem && mc.pointedEntity instanceof EntityItemFrame) {
+        if (FMLPlugin.getHudConfig().isShowFrameItem && mc.pointedEntity instanceof EntityItemFrame) {
             EntityItemFrame frame = (EntityItemFrame) mc.pointedEntity;
             ItemStack item = frame.getDisplayedItem();
             if (!item.isEmpty()) {
@@ -215,7 +192,7 @@ public class ModWrapper extends DummyModContainer {
     }
 
     public static boolean drawStats(int width, int height) {
-        if (hudConfig.useFancyHUD) {
+        if (FMLPlugin.getHudConfig().useFancyHUD) {
             Minecraft mc = Minecraft.getMinecraft();
             FontRenderer font = mc.fontRenderer;
             if (mc.getRenderViewEntity() instanceof EntityPlayer) {
@@ -245,6 +222,7 @@ public class ModWrapper extends DummyModContainer {
                 // 40,8
                 Gui.drawModalRectWithCustomSizedTexture(x + 4, y + 4, 80, 16,
                         16, 16, 128, 128);
+                if (!FMLPlugin.getHudConfig().isHideMeFromHUD)
                 font.drawStringWithShadow("§e§l" + entityplayer.getDisplayNameString(), x + 24, y + 3, 0xFFFFFF);
                 // 画血条
                 Utils.fillRect(x + 24, y +12, x + 166, y + 20, 90, 150, 150, 150);
@@ -283,6 +261,7 @@ public class ModWrapper extends DummyModContainer {
             tempPW = "";
             Minecraft.getMinecraft().player.sendChatMessage("/login " + pw);
         }
+        ChatConfig chatConfig = FMLPlugin.getChatConfig();
         String unformatted = text.getUnformattedText().replace("§r", "");
         for (String keyword : chatConfig.ignoredKeywords) {
             if (unformatted.contains(keyword)) return null;
@@ -380,7 +359,7 @@ public class ModWrapper extends DummyModContainer {
         }
         double x = -(width - (double) mcWidth) / 2.0d;
         double y = -(height - (double) mcHeight) / 2.0d;
-        if (mainMenuConfig.isParallax) {
+        if (FMLPlugin.getMainMenuConfig().isParallax) {
             double aW = (width * 0.025d);
             double aH = (height * 0.025d);
             width *= 1.1d;

@@ -1,6 +1,9 @@
 package top.mrxiaom.fantasia;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import top.mrxiaom.fantasia.config.ChatConfig;
+import top.mrxiaom.fantasia.config.HUDConfig;
+import top.mrxiaom.fantasia.config.MainMenuConfig;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -11,6 +14,30 @@ public class FMLPlugin implements IFMLLoadingPlugin {
     private static File mcLocation;
     private static File coremodLocation;
     private static File configPath;
+
+    private static MainMenuConfig mainMenuConfig;
+    private static ChatConfig chatConfig;
+    private static HUDConfig hudConfig;
+    public static MainMenuConfig getMainMenuConfig() {
+        return mainMenuConfig;
+    }
+
+    public static ChatConfig getChatConfig() {
+        return chatConfig;
+    }
+
+    public static HUDConfig getHudConfig() {
+        return hudConfig;
+    }
+
+    public static void reloadConfig() {
+        if (chatConfig == null) chatConfig = new ChatConfig(new File(FMLPlugin.getConfigPath(), "chat.json"));
+        if (mainMenuConfig == null) mainMenuConfig = new MainMenuConfig(new File(FMLPlugin.getConfigPath(), "mainmenu.json"));
+        if (hudConfig == null) hudConfig = new HUDConfig(new File(FMLPlugin.getConfigPath(), "hud.json"));
+        chatConfig.reloadConfig();
+        mainMenuConfig.reloadConfig();
+        hudConfig.reloadConfig();
+    }
 
     public static File getMcLocation() {
         return mcLocation;
@@ -49,7 +76,7 @@ public class FMLPlugin implements IFMLLoadingPlugin {
         coremodLocation = (File) data.get("coremodLocation");
 
         configPath = new File(FMLPlugin.getMcLocation(), "fantasia");
-        ModWrapper.reloadConfig();
+        reloadConfig();
     }
 
     @Override

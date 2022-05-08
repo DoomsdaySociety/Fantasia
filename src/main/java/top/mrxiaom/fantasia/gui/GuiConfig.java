@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Session;
 import org.lwjgl.input.Keyboard;
+import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class GuiConfig extends GuiScreen {
             this.mc.displayGuiScreen(last);
         }
         if (button.id == 7) {
-            ModWrapper.reloadConfig();
+            FMLPlugin.reloadConfig();
             this.mc.displayGuiScreen(last);
         }
     }

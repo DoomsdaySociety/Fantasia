@@ -17,6 +17,7 @@ public class HUDConfig extends AbstractConfig {
     public boolean isHideMeFromScoreboard;
     public boolean isHideScoreboardNumber;
     public boolean useFancyHUD;
+    public boolean isHideMeFromHUD;
     public boolean isShowFrameItem;
 
     public HUDConfig(File configFile) {
@@ -29,6 +30,7 @@ public class HUDConfig extends AbstractConfig {
         isHideMeFromScoreboard = true;
         useFancyHUD = true;
         isShowFrameItem = true;
+        isHideMeFromHUD = false;
     }
 
     public void reloadConfig() {
@@ -43,6 +45,7 @@ public class HUDConfig extends AbstractConfig {
             if(json.has("is-hide-me-from-scoreboard")) isHideMeFromScoreboard = json.get("is-hide-me-from-scoreboard").getAsBoolean();
             if(json.has("use-fancy-hud")) useFancyHUD = json.get("use-fancy-hud").getAsBoolean();
             if(json.has("is-show-frame-item")) isShowFrameItem = json.get("is-show-frame-item").getAsBoolean();
+            if(json.has("is-hide-me-from-hud")) isHideMeFromHUD = json.get("is-hide-me-from-hud").getAsBoolean();
             saveConfig();
         } catch (Throwable t) {
             logger.warn("无法加载配置文件", t);
@@ -61,6 +64,7 @@ public class HUDConfig extends AbstractConfig {
         json.addProperty("is-hide-me-from-scoreboard", isHideMeFromScoreboard);
         json.addProperty("use-fancy-hud", useFancyHUD);
         json.addProperty("is-show-frame-item", isShowFrameItem);
+        json.addProperty("is-hide-me-from-hud", isHideMeFromHUD);
         Utils.saveFromString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 }

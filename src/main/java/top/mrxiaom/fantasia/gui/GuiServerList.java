@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 
 import java.util.List;
@@ -193,8 +194,8 @@ public class GuiServerList extends GuiListExtended {
     public void setSelectedSlotIndex(int selectedSlotIndexIn) {
         showSelectionBox = false;
         setDimensions(width, slotHeight * getSize() + 4, x, y);
-        ModWrapper.getMainMenuConfig().selected = getListEntry(this.selectedSlotIndex = selectedSlotIndexIn).getServerData().serverName;
-        ModWrapper.getMainMenuConfig().saveConfig();
+        FMLPlugin.getMainMenuConfig().selected = getListEntry(this.selectedSlotIndex = selectedSlotIndexIn).getServerData().serverName;
+        FMLPlugin.getMainMenuConfig().saveConfig();
     }
 
     protected boolean isSelected(int slotIndex) {
@@ -209,7 +210,7 @@ public class GuiServerList extends GuiListExtended {
         this.serverListInternet.clear();
 
         for (int i = 0; i < p_148195_1_.size(); ++i) {
-            if (p_148195_1_.get(i).serverName.equals(ModWrapper.getMainMenuConfig().selected)) {
+            if (p_148195_1_.get(i).serverName.equals(FMLPlugin.getMainMenuConfig().selected)) {
                 selectedSlotIndex = i;
             }
             this.serverListInternet.add(new GuiServerEntry(this, p_148195_1_.get(i)));
