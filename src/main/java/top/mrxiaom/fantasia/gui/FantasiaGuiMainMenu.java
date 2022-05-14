@@ -1,7 +1,10 @@
-package top.mrxiaom.fantasia.mixin;
+package top.mrxiaom.fantasia.gui;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Runnables;
+import net.ccbluex.liquidbounce.ui.client.GuiMainMenu;
+import net.ccbluex.liquidbounce.utils.MinecraftInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.ServerData;
@@ -9,51 +12,28 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.WorldServerDemo;
-import net.minecraft.world.storage.ISaveFormat;
-import net.minecraft.world.storage.WorldInfo;
-import net.minecraftforge.client.gui.NotificationModUpdateScreen;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
-import top.mrxiaom.fantasia.gui.GuiConfig;
-import top.mrxiaom.fantasia.gui.GuiPasswordField;
-import top.mrxiaom.fantasia.gui.GuiServerList;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Mixin(GuiMainMenu.class)
-public class MixinGuiMainMenu extends GuiScreen {
+public class FantasiaGuiMainMenu extends GuiScreen{
     private static final ResourceLocation LANGUAGE_ICON = new ResourceLocation("fantasia", "textures/gui/languages.png");
-
-    @Shadow
     private String splashText;
-    @Shadow
-    @Final
     private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
-    @Shadow
-    @Final
     private static final ResourceLocation field_194400_H = new ResourceLocation("textures/gui/title/edition.png");
-    @Shadow
     private int widthCopyright;
-    @Shadow
     private int widthCopyrightRest;
-    @Shadow
-    private float panoramaTimer;
     private GuiButton modButton;
     private GuiButton langButton;
     private static final String copyrightString = "Mojang AB 版权所有， 禁止盗版! ";
@@ -62,11 +42,7 @@ public class MixinGuiMainMenu extends GuiScreen {
     List<ServerData> servers;
     GuiPasswordField pwField;
 
-    /**
-     * @author MrXiaoM
-     * @reason 重写初始化
-     */
-    @Overwrite
+    @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         this.widthCopyright = this.fontRenderer.getStringWidth(copyrightString);
@@ -123,11 +99,6 @@ public class MixinGuiMainMenu extends GuiScreen {
         this.serverList.handleMouseInput();
     }
 
-    /**
-     * @author MrXiaoM
-     * @reason 重写点击事件
-     */
-    @Overwrite
     protected void actionPerformed(GuiButton button) {
         if (button.id == 1) {
             this.mc.displayGuiScreen(new GuiWorldSelection(this));
@@ -162,13 +133,7 @@ public class MixinGuiMainMenu extends GuiScreen {
         }
     }
 
-    /**
-     * @author MrXiaoM
-     * @reason 重写绘制界面
-     */
-    @Overwrite
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.panoramaTimer += partialTicks;
         GlStateManager.disableAlpha();
         this.drawBackground(0);
         GlStateManager.enableAlpha();
@@ -222,13 +187,17 @@ public class MixinGuiMainMenu extends GuiScreen {
         this.serverList.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    @Inject(at = @At("HEAD"), method = "mouseClicked*", cancellable = true)
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
-        if (this.pwField.mouseClicked(mouseX, mouseY, mouseButton)) {
-            ci.cancel();
-            return;
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (this.pwField.mouseClicked(mouseX, mouseY, mouseButton)) return;
+        if (this.serverList.mouseClicked(mouseX, mouseY, mouseButton)) return;
+
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseX > this.widthCopyrightRest && mouseX < this.widthCopyrightRest + this.widthCopyright && mouseY > this.height - 10 && mouseY < this.height)
+        {
+            this.mc.displayGuiScreen(new GuiWinGame(false, Runnables.doNothing()));
         }
-        if (this.serverList.mouseClicked(mouseX, mouseY, mouseButton)) ci.cancel();
     }
 
     @Override
@@ -237,31 +206,19 @@ public class MixinGuiMainMenu extends GuiScreen {
         this.serverList.mouseReleased(mouseX, mouseY, state);
     }
 
-    /**
-     * @author MrXiaoM
-     * @reason 适配密码输入框
-     */
-    @Overwrite
+    @Override
     protected void keyTyped(char p_73869_1_, int p_73869_2_) throws IOException {
         if (!pwField.textboxKeyTyped(p_73869_1_, p_73869_2_))
             super.keyTyped(p_73869_1_, p_73869_2_);
     }
 
-    /**
-     * @author MrXiaoM
-     * @reason 适配服务器列表
-     */
-    @Overwrite
+    @Override
     public void updateScreen() {
         if (this.serverList != null && this.serverList.getOldServerPinger() != null)
             this.serverList.getOldServerPinger().pingPendingNetworks();
     }
 
-    /**
-     * @author MrXiaoM
-     * @reason 适配服务器列表
-     */
-    @Overwrite
+    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
         if (this.serverList != null && this.serverList.getOldServerPinger() != null)

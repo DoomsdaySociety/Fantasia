@@ -4,9 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,6 +20,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -39,6 +39,8 @@ import org.lwjgl.opengl.Display;
 import top.mrxiaom.fantasia.config.ChatConfig;
 import top.mrxiaom.fantasia.config.HUDConfig;
 import top.mrxiaom.fantasia.config.MainMenuConfig;
+import top.mrxiaom.fantasia.gui.FantasiaGuiMainMenu;
+import top.mrxiaom.fantasia.gui.GuiConfigFactory;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -82,7 +84,7 @@ public class ModWrapper extends DummyModContainer {
         ModMetadata meta = getMetadata();
         meta.modId = "fantasia";
         meta.name = "幻想曲";
-        meta.version = "1.0";
+        meta.version = "1.0.1";
         meta.logoFile = "logo.png";
         meta.description = "适用于零都市服务器的辅助Mod";
         meta.authorList = Arrays.asList("MrXiaoM", "AnonymousTech");
@@ -333,6 +335,11 @@ public class ModWrapper extends DummyModContainer {
 
     public File getSource() {
         return FMLPlugin.getCoremodLocation();
+    }
+
+    @Override
+    public String getGuiClassName() {
+        return GuiConfigFactory.class.getName();
     }
 
     public static void updateTitle() {

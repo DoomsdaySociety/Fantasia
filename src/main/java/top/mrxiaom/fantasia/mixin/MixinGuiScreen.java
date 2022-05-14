@@ -6,38 +6,19 @@ import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 
-@Mixin(GuiScreen.class)
+@Mixin(value = GuiScreen.class, priority = 999)
 public class MixinGuiScreen extends Gui {
-    @Shadow
-    public Minecraft mc;
-
-    @Shadow
-    public int width;
-
-    @Shadow
-    public int height;
-
-    /**
-     * @author MrXiaoM
-     * @reason 修改背景
-     */
-    @Overwrite
-    public void drawWorldBackground(int tint) {
-        if (this.mc.world != null) {
-            this.drawGradientRect(0, 0, this.width, this.height, 0x60000000, 0x80000000);
-        } else {
-            this.drawBackground(tint);
+    @Inject(at = @At("HEAD"), method = "drawBackground", cancellable = true)
+    public void drawBackground(int tint, CallbackInfo ci) {
+        if (FMLPlugin.getMainMenuConfig().overrideBackground) {
+            ModWrapper.drawBackground();
+            ci.cancel();
         }
-    }
-
-    /**
-     * @author MrXiaoM
-     * @reason 修改背景
-     */
-    @Overwrite
-    public void drawBackground(int tint) {
-        ModWrapper.drawBackground();
     }
 }

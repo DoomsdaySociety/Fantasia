@@ -10,7 +10,6 @@
     "MixinGuiButton",
     "MixinGuiIngame",
     "MixinGuiInventory",
-    "MixinGuiMainMenu",
     "MixinGuiScreen",
     "MixinGuiSingleplayer",
     "MixinGuiSlot",

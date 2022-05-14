@@ -16,6 +16,7 @@ public class MainMenuConfig extends AbstractConfig {
     public final List<String> servers = new ArrayList<>();
     public String selected;
     public boolean isParallax;
+    public boolean overrideBackground;
 
     public MainMenuConfig(File configFile) {
         super(configFile);
@@ -43,6 +44,7 @@ public class MainMenuConfig extends AbstractConfig {
         selected = "§a自动路线";
 
         isParallax = true;
+        overrideBackground = true;
     }
 
     public void reloadConfig() {
@@ -62,6 +64,7 @@ public class MainMenuConfig extends AbstractConfig {
             }
             if(json.has("selected-server")) selected = json.get("selected-server").getAsString();
             if(json.has("is-parallax")) isParallax = json.get("is-parallax").getAsBoolean();
+            if(json.has("is-override-background")) overrideBackground = json.get("is-override-background").getAsBoolean();
         } catch (Throwable t) {
             logger.warn("无法加载配置文件", t);
             if (configFile.exists()) {
@@ -82,6 +85,7 @@ public class MainMenuConfig extends AbstractConfig {
         json.add("servers", serversArray);
         json.addProperty("selected-server", selected);
         json.addProperty("is-parallax", isParallax);
+        json.addProperty("is-override-background", overrideBackground);
         Utils.saveFromString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 }
