@@ -13,7 +13,17 @@ import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 
 @Mixin(value = GuiScreen.class, priority = 999)
-public class MixinGuiScreen extends Gui {
+public abstract class MixinGuiScreen extends Gui {
+    @Shadow public abstract void drawWorldBackground(int tint);
+
+    /**
+     * @author MrXiaoM
+     * @reason 修改背景
+     */
+    @Overwrite
+    public void drawDefaultBackground() {
+        this.drawWorldBackground(0);
+    }
     @Inject(at = @At("HEAD"), method = "drawBackground", cancellable = true)
     public void drawBackground(int tint, CallbackInfo ci) {
         if (FMLPlugin.getMainMenuConfig().overrideBackground) {

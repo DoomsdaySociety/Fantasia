@@ -23,7 +23,6 @@ apply plugin: 'org.spongepowered.mixin'
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
     compile 'org.spongepowered:mixin:0.8-SNAPSHOT'
-    compile files("/libs/LiquidBounce1.12.2.jar")
 }
 
 version = '1.0.1'

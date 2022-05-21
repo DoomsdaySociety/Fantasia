@@ -69,9 +69,6 @@ public class FMLPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        for (String s : data.keySet()) {
-            System.out.println(s + ": " + (data.get(s) == null ? "" : ("(" + data.get(s).getClass().getName() + ") ")) + data.get(s));
-        }
         mcLocation = (File) data.get("mcLocation");
         coremodLocation = (File) data.get("coremodLocation");
 

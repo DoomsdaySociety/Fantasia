@@ -3,14 +3,7 @@ package top.mrxiaom.fantasia.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.Session;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.PixelFormat;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,17 +15,6 @@ import javax.annotation.Nullable;
 
 @Mixin(value = Minecraft.class, priority = 999)
 public abstract class MixinMinecraft {
-    @Shadow
-    @Final
-    private static Logger LOGGER;
-    @Shadow
-    private boolean fullscreen;
-    @Final
-    @Shadow
-    private Session session;
-
-    @Shadow
-    abstract void updateDisplayMode() throws LWJGLException;
 
     @Shadow @Nullable public GuiScreen currentScreen;
 
@@ -52,6 +34,7 @@ public abstract class MixinMinecraft {
      */
     @Inject(method = "displayGuiScreen", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;currentScreen:Lnet/minecraft/client/gui/GuiScreen;", shift = At.Shift.AFTER))
     private void handleDisplayGuiScreen(CallbackInfo callbackInfo) {
+        // System.out.println(this.currentScreen);
         if (this.currentScreen instanceof GuiMainMenu) {
             this.currentScreen = new FantasiaGuiMainMenu();
             this.displayGuiScreen(this.currentScreen);

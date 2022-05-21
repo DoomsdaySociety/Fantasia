@@ -7,14 +7,19 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "FixScoreboard",
+    "MixinFMLClientHandler",
     "MixinGuiButton",
     "MixinGuiIngame",
+    "MixinGuiIngameMenu",
     "MixinGuiInventory",
+    "MixinGuiMerchant",
     "MixinGuiScreen",
     "MixinGuiSingleplayer",
     "MixinGuiSlot",
     "MixinMinecraft",
-    "MixinSPacketChat",
-    "MixinGuiIngameMenu"
+    "MixinSPacketChat"
+  ],
+  "client": [
+    "MixinGuiScreenWorking"
   ]
 }

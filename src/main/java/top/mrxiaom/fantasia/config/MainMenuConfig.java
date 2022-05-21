@@ -17,7 +17,7 @@ public class MainMenuConfig extends AbstractConfig {
     public String selected;
     public boolean isParallax;
     public boolean overrideBackground;
-
+    public int merchantDelay;
     public MainMenuConfig(File configFile) {
         super(configFile);
     }
@@ -45,6 +45,7 @@ public class MainMenuConfig extends AbstractConfig {
 
         isParallax = true;
         overrideBackground = true;
+        merchantDelay = 20;
     }
 
     public void reloadConfig() {
@@ -65,6 +66,7 @@ public class MainMenuConfig extends AbstractConfig {
             if(json.has("selected-server")) selected = json.get("selected-server").getAsString();
             if(json.has("is-parallax")) isParallax = json.get("is-parallax").getAsBoolean();
             if(json.has("is-override-background")) overrideBackground = json.get("is-override-background").getAsBoolean();
+            if(json.has("merchant-delay")) merchantDelay = json.get("merchant-delay").getAsInt();
         } catch (Throwable t) {
             logger.warn("无法加载配置文件", t);
             if (configFile.exists()) {
@@ -86,6 +88,7 @@ public class MainMenuConfig extends AbstractConfig {
         json.addProperty("selected-server", selected);
         json.addProperty("is-parallax", isParallax);
         json.addProperty("is-override-background", overrideBackground);
+        json.addProperty("merchant-delay", merchantDelay);
         Utils.saveFromString(configFile, new GsonBuilder().setPrettyPrinting().create().toJson(json));
     }
 }

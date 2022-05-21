@@ -3,8 +3,6 @@ package top.mrxiaom.fantasia.gui;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Runnables;
-import net.ccbluex.liquidbounce.ui.client.GuiMainMenu;
-import net.ccbluex.liquidbounce.utils.MinecraftInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.ServerData;
