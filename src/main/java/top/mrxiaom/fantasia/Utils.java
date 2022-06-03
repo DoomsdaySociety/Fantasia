@@ -11,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 public class Utils {
 
     public static String removeColors(String s) {
-        Matcher m = Pattern.compile("§[A-Za-z0-9]").matcher(s);
+        Matcher m = Pattern.compile("§.").matcher(s);
         while (m.find()) {
-            s = s.replace(m.group(),"");
+            s = s.replace(m.group(), "");
         }
         return s;
     }
