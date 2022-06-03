@@ -11,17 +11,11 @@ import java.nio.charset.StandardCharsets;
 public class Utils {
 
     public static String removeColors(String s) {
-        StringBuilder result = new StringBuilder();
-        boolean a = false;
-        char[] array = s.toCharArray();
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == '§') {
-                i++;
-                continue;
-            }
-            result.append(array[i]);
+        Matcher m = Pattern.compile("§.").matcher(s);
+        while (m.find()) {
+            s = s.replace(m.group(), "");
         }
-        return result.toString();
+        return s;
     }
 
     public static String readAsString(File file) {
