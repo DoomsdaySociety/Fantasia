@@ -8,32 +8,31 @@ import org.spongepowered.asm.mixin.Shadow;
 import top.mrxiaom.fantasia.ModWrapper;
 
 @Mixin(GuiScreenWorking.class)
-public class MixinGuiScreenWorking extends GuiScreen{
+public class MixinGuiScreenWorking extends GuiScreen {
 
-    @Shadow private boolean doneWorking;
+    @Shadow
+    private boolean doneWorking;
 
-    @Shadow private String title;
+    @Shadow
+    private String title;
 
-    @Shadow private String stage;
+    @Shadow
+    private String stage;
 
-    @Shadow private int progress;
+    @Shadow
+    private int progress;
 
     /**
      * @author MrXiaoM
      * @reason 修改背景
      */
     @Overwrite
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        if (this.doneWorking)
-        {
-            if (!this.mc.isConnectedToRealms())
-            {
-                this.mc.displayGuiScreen((GuiScreen)null);
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        if (this.doneWorking) {
+            if (!this.mc.isConnectedToRealms()) {
+                this.mc.displayGuiScreen((GuiScreen) null);
             }
-        }
-        else
-        {
+        } else {
             ModWrapper.drawBackground();
             this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 70, 16777215);
             this.drawCenteredString(this.fontRenderer, this.stage + " " + this.progress + "%", this.width / 2, 90, 16777215);

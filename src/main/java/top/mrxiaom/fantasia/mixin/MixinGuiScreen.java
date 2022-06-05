@@ -1,6 +1,5 @@
 package top.mrxiaom.fantasia.mixin;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +13,8 @@ import top.mrxiaom.fantasia.ModWrapper;
 
 @Mixin(value = GuiScreen.class, priority = 999)
 public abstract class MixinGuiScreen extends Gui {
-    @Shadow public abstract void drawWorldBackground(int tint);
+    @Shadow
+    public abstract void drawWorldBackground(int tint);
 
     /**
      * @author MrXiaoM
@@ -24,6 +24,7 @@ public abstract class MixinGuiScreen extends Gui {
     public void drawDefaultBackground() {
         this.drawWorldBackground(0);
     }
+
     @Inject(at = @At("HEAD"), method = "drawBackground", cancellable = true)
     public void drawBackground(int tint, CallbackInfo ci) {
         if (FMLPlugin.getMainMenuConfig().overrideBackground) {

@@ -9,9 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.mrxiaom.fantasia.FMLPlugin;
-import top.mrxiaom.fantasia.ModWrapper;
-
-import java.io.IOException;
 
 @Mixin(GuiIngameMenu.class)
 public class MixinGuiIngameMenu extends GuiScreen {

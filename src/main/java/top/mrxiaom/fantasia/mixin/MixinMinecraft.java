@@ -16,9 +16,12 @@ import javax.annotation.Nullable;
 @Mixin(value = Minecraft.class, priority = 999)
 public abstract class MixinMinecraft {
 
-    @Shadow @Nullable public GuiScreen currentScreen;
+    @Shadow
+    @Nullable
+    public GuiScreen currentScreen;
 
-    @Shadow public abstract void displayGuiScreen(@Nullable GuiScreen guiScreenIn);
+    @Shadow
+    public abstract void displayGuiScreen(@Nullable GuiScreen guiScreenIn);
 
     /**
      * @author MrXiaoM

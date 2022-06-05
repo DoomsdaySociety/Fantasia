@@ -4,7 +4,9 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,15 +15,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -37,9 +35,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.Display;
 import top.mrxiaom.fantasia.config.ChatConfig;
-import top.mrxiaom.fantasia.config.HUDConfig;
-import top.mrxiaom.fantasia.config.MainMenuConfig;
-import top.mrxiaom.fantasia.gui.FantasiaGuiMainMenu;
 import top.mrxiaom.fantasia.gui.GuiConfigFactory;
 
 import java.io.File;
@@ -56,6 +51,7 @@ public class ModWrapper extends DummyModContainer {
     private static final ResourceLocation resBg = new ResourceLocation("fantasia", "textures/gui/background.png");
     private static ModWrapper instance;
     private static String tempPW = "";
+
     public static ModWrapper getInstance() {
         return instance;
     }
@@ -112,7 +108,8 @@ public class ModWrapper extends DummyModContainer {
                 || event.getType().equals(RenderGameOverlayEvent.ElementType.FOOD)
                 || event.getType().equals(RenderGameOverlayEvent.ElementType.AIR))
             event.setCanceled(true);
-        if (event.getType().equals(RenderGameOverlayEvent.ElementType.HEALTH)) drawStats(event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight());
+        if (event.getType().equals(RenderGameOverlayEvent.ElementType.HEALTH))
+            drawStats(event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight());
     }
 
     @SubscribeEvent
@@ -201,14 +198,14 @@ public class ModWrapper extends DummyModContainer {
                 DecimalFormat df = new DecimalFormat("0.0");
                 int x = width / 2 - 85;
                 int y = height - 68;
-                EntityPlayer entityplayer = (EntityPlayer)mc.getRenderViewEntity();
+                EntityPlayer entityplayer = (EntityPlayer) mc.getRenderViewEntity();
                 String healthString = "HP: " + df.format(entityplayer.getHealth()) + " / " + df.format(entityplayer.getMaxHealth());
                 float health = entityplayer.getHealth() / entityplayer.getMaxHealth();
                 FoodStats foodStats = entityplayer.getFoodStats();
                 float food = foodStats.getFoodLevel() / 20f;
                 // 画背景
                 Utils.fillRect(x, y, x + 170, y + 24, 60, 23, 23, 23);
-                Utils.drawRect(x, y, x + 170, y + 24,-1, 255, 0, 245, 245);
+                Utils.drawRect(x, y, x + 170, y + 24, -1, 255, 0, 245, 245);
                 // 画氧气值
                 if (entityplayer.isInsideOfMaterial(Material.WATER)) {
                     float air = mc.player.getAir() / 300f;
@@ -225,10 +222,10 @@ public class ModWrapper extends DummyModContainer {
                 Gui.drawModalRectWithCustomSizedTexture(x + 4, y + 4, 80, 16,
                         16, 16, 128, 128);
                 if (!FMLPlugin.getHudConfig().isHideMeFromHUD)
-                font.drawStringWithShadow("§e§l" + entityplayer.getDisplayNameString(), x + 24, y + 3, 0xFFFFFF);
+                    font.drawStringWithShadow("§e§l" + entityplayer.getDisplayNameString(), x + 24, y + 3, 0xFFFFFF);
                 // 画血条
-                Utils.fillRect(x + 24, y +12, x + 166, y + 20, 90, 150, 150, 150);
-                Utils.fillRect(x + 24, y +12, x + 24 + health * 142, y + 20, 128, 245, 216, 0);
+                Utils.fillRect(x + 24, y + 12, x + 166, y + 20, 90, 150, 150, 150);
+                Utils.fillRect(x + 24, y + 12, x + 24 + health * 142, y + 20, 128, 245, 216, 0);
                 font.drawStringWithShadow(healthString, x + 166 - font.getStringWidth(healthString), y + 3, 0xFFFFFF);
                 // 画饱食度
                 Utils.fillRect(x + 24, y + 18, x + 24 + food * 142, y + 20, 128, 245, 106, 0);

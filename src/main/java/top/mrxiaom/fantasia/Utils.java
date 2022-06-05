@@ -7,8 +7,29 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
+
+    public static String connect(List<String> array, String s) {
+        String result = "";
+        for (int i = 0; i < array.size(); i++) {
+            result += array.get(i);
+            if (i < array.size() - 1) result += s;
+        }
+        return result;
+    }
+
+    public static String connect(String[] array, String s) {
+        String result = "";
+        for (int i = 0; i < array.length; i++) {
+            result += array[i];
+            if (i < array.length - 1) result += s;
+        }
+        return result;
+    }
 
     public static String removeColors(String s) {
         Matcher m = Pattern.compile("§.").matcher(s);
@@ -43,10 +64,11 @@ public class Utils {
         try {
             file.getParentFile().mkdirs();
             file.createNewFile();
-        }catch (Throwable ignored){}
+        } catch (Throwable ignored) {
+        }
         try (
                 FileOutputStream fos = new FileOutputStream(file);
-                OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)){
+                OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
             BufferedWriter out = new BufferedWriter(osw);
             out.write(content);
             out.flush();
@@ -58,7 +80,7 @@ public class Utils {
     }
 
     public static void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor,
-                                    float zLevel) {
+                                        float zLevel) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;

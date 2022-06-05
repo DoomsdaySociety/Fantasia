@@ -18,6 +18,7 @@ public class FMLPlugin implements IFMLLoadingPlugin {
     private static MainMenuConfig mainMenuConfig;
     private static ChatConfig chatConfig;
     private static HUDConfig hudConfig;
+
     public static MainMenuConfig getMainMenuConfig() {
         return mainMenuConfig;
     }
@@ -30,9 +31,13 @@ public class FMLPlugin implements IFMLLoadingPlugin {
         return hudConfig;
     }
 
+    public static File config(String path) {
+        return new File(FMLPlugin.getConfigPath(), path);
+    }
+
     public static void reloadConfig() {
-        if (chatConfig == null) chatConfig = new ChatConfig(new File(FMLPlugin.getConfigPath(), "chat.json"));
-        if (mainMenuConfig == null) mainMenuConfig = new MainMenuConfig(new File(FMLPlugin.getConfigPath(), "mainmenu.json"));
+        if (chatConfig == null) chatConfig = new ChatConfig(config("chat.json"));
+        if (mainMenuConfig == null) mainMenuConfig = new MainMenuConfig(config("mainmenu.json"));
         if (hudConfig == null) hudConfig = new HUDConfig(new File(FMLPlugin.getConfigPath(), "hud.json"));
         chatConfig.reloadConfig();
         mainMenuConfig.reloadConfig();

@@ -13,19 +13,17 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.GuiModList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import top.mrxiaom.fantasia.FMLPlugin;
 import top.mrxiaom.fantasia.ModWrapper;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class FantasiaGuiMainMenu extends GuiScreen{
+public class FantasiaGuiMainMenu extends GuiScreen {
     private static final ResourceLocation LANGUAGE_ICON = new ResourceLocation("fantasia", "textures/gui/languages.png");
     private String splashText;
     private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
@@ -153,8 +151,8 @@ public class FantasiaGuiMainMenu extends GuiScreen{
         GlStateManager.pushMatrix();
         GlStateManager.translate(j + 227, k + 40.0F, 0.0F);
         GlStateManager.rotate(-20.0F, 0.0F, 0.0F, 1.0F);
-        float f = 1.8F - MathHelper.abs(MathHelper.sin((float)(Minecraft.getSystemTime() % 1000L) / 1000.0F * ((float)Math.PI * 2F)) * 0.1F);
-        f = f * 100.0F / (float)(this.fontRenderer.getStringWidth(this.splashText) + 32);
+        float f = 1.8F - MathHelper.abs(MathHelper.sin((float) (Minecraft.getSystemTime() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
+        f = f * 100.0F / (float) (this.fontRenderer.getStringWidth(this.splashText) + 32);
         GlStateManager.scale(f, f, f);
         this.drawCenteredString(this.fontRenderer, this.splashText, 0, -8, -256);
         GlStateManager.popMatrix();
@@ -192,8 +190,7 @@ public class FantasiaGuiMainMenu extends GuiScreen{
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseX > this.widthCopyrightRest && mouseX < this.widthCopyrightRest + this.widthCopyright && mouseY > this.height - 10 && mouseY < this.height)
-        {
+        if (mouseX > this.widthCopyrightRest && mouseX < this.widthCopyrightRest + this.widthCopyright && mouseY > this.height - 10 && mouseY < this.height) {
             this.mc.displayGuiScreen(new GuiWinGame(false, Runnables.doNothing()));
         }
     }
